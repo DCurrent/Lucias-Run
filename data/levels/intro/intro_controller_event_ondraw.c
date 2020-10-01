@@ -8,6 +8,10 @@
 
 #endif // DC_INSET
 
+// Caskey, Damon V.
+// 2020-09-~~
+//
+// Get or allocate screen identified by {index}.
 void get_screen(char index, int size_x, int size_y)
 {
 	void screen;
