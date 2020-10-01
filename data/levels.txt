@@ -1,0 +1,66 @@
+# List level filenames here.
+#
+# Syntax:
+#	set	[difficulty]	Start a new set of levels (e.g. "normal")
+#
+#	file	[filename]	A level or part of a level
+#	next			Go to next level (show "stage clear" and stuff)
+#	scene	[filename]	Show a cut-scene
+#
+
+maxplayers 4
+
+timeloc   0 -250 21 20 0
+
+bgicon		data/sprites/hud_background.png -80 230
+
+p1life       -100 -100
+p1mp         -100 -100
+p1namej      4		226	 -100  -100  4 226
+p1icon       4		240 
+p1lifen      -100  -100 
+p1lifex      -100  -100
+p1score      4		226  -100	-100	32		259
+e1life       -100  -100
+e1icon       -100  -100
+e1name       -100  -100
+
+p2life       -100 -100
+p2mp         -100 -100
+p2namej      124	226	 -100  -100  124 226
+p2icon       124	240 
+p2lifen      -100  -100 
+p2lifex      -100  -100
+p2score      124	226  -100	-100	152		259
+e2life       -100  -100
+e2icon       -100  -100
+e2name       -100  -100
+
+p3life       -100 -100
+p3mp         -100 -100
+p3namej      244	226	 -100  -100  244 226
+p3icon       244	240 
+p3lifen      -100  -100 
+p3lifex      -100  -100
+p3score      244	226  -100	-100	272		259
+e3life       -100  -100
+e3icon       -100  -100
+e3name       -100  -100
+
+p4life       -100 -100
+p4mp         -100 -100
+p4namej      364	226	 -100  -100  364 226
+p4icon       364	240 
+p4lifen      -100  -100 
+p4lifex      -100  -100
+p4score      364	226  -100	-100	392		259
+e4life       -100  -100
+e4icon       -100  -100
+e4name       -100  -100
+
+
+set	Intro
+lives  1
+nosame 0 2
+z       160 200 
+file	data/levels/intro/intro.txt

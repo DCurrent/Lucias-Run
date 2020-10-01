@@ -1,0 +1,81 @@
+#*****icons*****
+
+icon		data/chars/lucia/icon_default.png	1
+
+#*****General*****
+
+name	     	Lucia_B.
+type	     	player
+bounce	     	2
+health	     	100
+speed	     	12
+Throwdamage  	26
+holdblock    	2
+nodieblink   	2
+falldie      	2
+risetime     	90
+running      	30 4 2 0 0
+#turndelay    	15
+makeinv      	3
+projectilehit 	player obstacle
+candamage     	enemy obstacle
+hostile			enemy
+gfxshadow    	1
+blockpain    	1
+sleepwait       1000
+combostyle		1
+atchain      	1 2 3 4 0 5 6 7
+height 			95
+height 			100
+dust			fall_land jump_land jump_liftoff
+mpset 			100 3 50 1 2 2
+bflash			Block
+
+#*****Scripts*****
+
+#*****MP Specific*****
+
+mpset 100 3 50 1 2 2
+
+#*****NPC/Enemy Specific*****
+#*****Inert Specfic*****
+#*****Sub Entites*****
+#*****Alternates*******
+
+#palette	       data/chars/lucia/default_0_cs.act
+#alternatepal   data/chars/terry/default_1_cs.act
+
+#*****Commands*****************************************************************************
+
+
+
+#*****Basic********************************************************************************
+
+#anim spawn
+#anim respawn
+
+anim idle # Ready stance.
+
+	loop 	1
+	delay	12
+	offset	75 100
+	
+	bbox.position.x 56
+	bbox.position.y 60
+	bbox.size.x 37
+	bbox.size.y 105
+
+	frame	data/chars/lucia/idle_0.png
+
+anim walk # Normal walk
+
+	loop 	1
+	delay	12
+	offset	75 100
+		
+	bbox.position.x 56
+	bbox.position.y 60
+	bbox.size.x 37
+	bbox.size.y 105
+
+	frame	data/chars/lucia/idle_0.png

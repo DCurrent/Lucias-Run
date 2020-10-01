@@ -1,0 +1,21 @@
+colourselect 	1
+ajspecial 	0
+spdirection 	1 1 1 1
+maxfollows	4
+maxidles	1
+maxwalks	1
+maxattacks      4
+maxfreespecials 4
+maxattacktypes  4
+noaircancel     0
+combodelay	200
+
+## Flash/Hit sparks.
+
+# IntroHoward Arena
+know 	intro_controller		data/levels/intro/intro_controller.txt
+
+load	Lucia_B.			data/chars/lucia/lucia.txt
+
+know	dummy				data/chars/misc/dummy/dummy.txt
+

@@ -1,0 +1,10 @@
+name			dummy
+
+nomove 			1 1
+
+health			150
+speed			10
+type			enemy
+
+anim idle
+	frame data/sprites/blank.png

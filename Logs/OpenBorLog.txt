@@ -1,0 +1,162 @@
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55913066496 Bytes ( 53322 MB )
+ Used Ram:     6225920 Bytes (     5 MB )
+
+debug:nativeWidth, nativeHeight, bpp, Hz  1920, 1080, 24, 144
+OpenBoR v3.0 Build 7195 (commit hash: fb32dd4), Compile Date: Aug  1 2020
+
+Game Selected: ./Paks/bor.pak
+
+FileCaching System Init......	Disabled
+Initializing video............
+Reading video settings from 'data/video.txt'.
+Initialized video.............	480x272 (Mode: 1)
+
+Loading menu.txt.............	Done!
+Loading fonts................	1 2 3 4 Done!
+Timer init...................	Done!
+Initialize Sound..............	
+Loading sprites..............	Done!
+Loading level order..........	Done!
+Loading model constants......	Done!
+Loading script settings......	Done!
+Loading scripts..............	Done!
+Loading models...............
+
+Cacheing 'intro_controller' from data/levels/intro/intro_controller.txt
+Cacheing 'Lucia_B.' from data/chars/lucia/lucia.txt
+Cacheing 'dummy' from data/chars/misc/dummy/dummy.txt
+
+Loading 'Lucia_B.' from data/chars/lucia/lucia.txt 
+ ...done!
+
+Loading models...............	Done!
+Object engine init...........	Done!
+Input init...................	No Joystick(s) Found!
+Done!
+Create blending tables.......	Done!
+Save settings so far........	Done!
+
+
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/menu'
+
+Can't play music file 'data/music/remix'
+Level Loading:   'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55851237376 Bytes ( 53263 MB )
+ Used Ram:    51728384 Bytes (    49 MB )
+
+Loading 'intro_controller' from data/levels/intro/intro_controller.txt 
+ ...done!
+Loading 'dummy' from data/chars/misc/dummy/dummy.txt 
+ ...done!
+
+Level Loaded:    'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55850885120 Bytes ( 53263 MB )
+ Used Ram:    52379648 Bytes (    49 MB )
+Total sprites mapped: 4
+
+Level Unloading: 'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55867609088 Bytes ( 53279 MB )
+ Used Ram:    49135616 Bytes (    46 MB )
+
+Unload 'intro_controller' ............Done.
+RAM Status:
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55867777024 Bytes ( 53279 MB )
+ Used Ram:    48877568 Bytes (    46 MB )
+
+
+Can't play music file 'data/music/gameover'
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/menu'
+
+Can't play music file 'data/music/remix'
+Level Loading:   'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55816380416 Bytes ( 53230 MB )
+ Used Ram:    49651712 Bytes (    47 MB )
+
+Loading 'intro_controller' from data/levels/intro/intro_controller.txt 
+ ...done!
+
+Level Loaded:    'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55869685760 Bytes ( 53281 MB )
+ Used Ram:    50077696 Bytes (    47 MB )
+Total sprites mapped: 4
+
+Level Unloading: 'data/levels/intro/intro.txt'
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55872884736 Bytes ( 53284 MB )
+ Used Ram:    51593216 Bytes (    49 MB )
+
+Unload 'intro_controller' ............Done.
+RAM Status:
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55872884736 Bytes ( 53284 MB )
+ Used Ram:    51253248 Bytes (    48 MB )
+
+
+Can't play music file 'data/music/gameover'
+
+Can't play music file 'data/music/remix'
+
+Can't play music file 'data/music/remix'
+
+************ Shutting Down ************
+
+OpenBOR v3.0 Build 7195 (commit hash: fb32dd4), Compile Date: Aug  1 2020
+Presented by the OpenBOR Team.
+www.chronocrash.com
+OpenBOR is the open source continuation of Beats of Rage by Senile Team.
+
+Special thanks to SEGA and SNK.
+
+Total Ram: 68511694848 Bytes ( 65337 MB )
+ Free Ram: 55874875392 Bytes ( 53286 MB )
+ Used Ram:    51302400 Bytes (    48 MB )
+
+Release level data...........
+Done!
+
+Release graphics data........	Done!
+Release game data............
+
+Unload 'Lucia_B.' ............Done.
+Unload 'dummy' ............Done.
+
+Warning: 4 script variants are not freed, dumping...
+openbor_allocscreen
+openbor_allocscreen
+openbor_allocscreen
+openbor_allocscreen
+
+Release game data............	Done!
+Release timer................	Done!
+Release input hardware.......	Done!
+Release sound system.........	Done!
+Release FileCaching System...	Done!
+
+**************** Done *****************
+
+OpenBOR v3.0 Build 7195 (commit hash: fb32dd4), Compile Date: Aug  1 2020
+Presented by the OpenBOR Team.
+www.chronocrash.com
+OpenBOR is the open source continuation of Beats of Rage by Senile Team.
+
+Special thanks to SEGA and SNK.
+

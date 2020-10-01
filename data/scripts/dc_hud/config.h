@@ -1,0 +1,2 @@
+#define DC_HUD_VAR_KEY_SPRITE_STATUS_HEALTH  "dc_health"
+#define DC_HUD_VAR_KEY_SPRITE_STATUS_SPECIAL "dc_special"
