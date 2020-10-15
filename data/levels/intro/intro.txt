@@ -1,5 +1,5 @@
 music		data/music/raiden_v_st1.ogg 379726
-direction	both
+direction	both 
 
 # Default layers.
 # background	filepath								xratio	zratio	xoffset	zoffset	xspace	zspace	xrepeat	zrepeat	trans	alpha	w-mode	amp	wl	ws	move	quake	neon
@@ -10,7 +10,7 @@ panel		data/levels/intro/path_0.png 	none 			none
 order		a
 
 #bgspeed 	1 1
-vbgspeed 	1 1
+vbgspeed 	0.3 1
 
 # Additional layers. I like to use fglayer vs. bglayer because
 # you get fine control over the layer positon.
@@ -19,9 +19,10 @@ vbgspeed 	1 1
 
 ###########
 fglayer		data/levels/intro/sky_0.png					-400	0.9		0		0		0		0		0		-1		-1		0		0		0			0		0		0		-0.5	0       0
-fglayer		data/levels/intro/hills_0.png				-399	0.94	0		0		61		0		0		-1		1		1		0		0			0		0		0		0		0       0
-fglayer		data/levels/intro/hills_1.png				-398	0.92	0		0		62		0		0		-1		1		1		0		0			0		0		0		0		0       0
-fglayer		data/levels/intro/grass_1.png				-401	0.6		0		0		0		0		0		-1		-1		0		0		0			0		0		0		1		1       0
+fglayer		data/levels/intro/hills_0.png				-399	0.94	0		0		40		0		0		-1		1		1		0		0			0		0		0		0		0       0
+fglayer		data/levels/intro/hills_1.png				-398	0.92	0		0		47		0		0		-1		1		1		0		0			0		0		0		0		0       0
+fglayer		data/levels/intro/grass_0.png				-401	0.6		0		0		0		0		0		-1		-1		0		0		0			0		0		0		1		1       0
+
 ##########
 
 #---------------------
@@ -33,6 +34,6 @@ at		0
 
 spawn		dummy
 health		1000
-coords		100 100
+coords		100 70
 at		0
 

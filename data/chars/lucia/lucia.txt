@@ -31,6 +31,8 @@ dust			fall_land jump_land jump_liftoff
 mpset 			100 3 50 1 2 2
 bflash			Block
 
+subject_to_minz 0
+
 #*****Scripts*****
 
 #*****MP Specific*****

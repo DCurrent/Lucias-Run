@@ -62,5 +62,5 @@ e4name       -100  -100
 set	Intro
 lives  1
 nosame 0 2
-z       160 200 
+z       175 220 
 file	data/levels/intro/intro.txt
