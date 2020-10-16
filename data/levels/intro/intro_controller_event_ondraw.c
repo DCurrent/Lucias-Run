@@ -1,4 +1,5 @@
 #include "data/scripts/dc_hud/main.c"
+#include "data/scripts/dc_math/main.c"
 
 #ifndef DC_INSET
 
@@ -112,42 +113,42 @@ void dc_draw_ground_multi_layer()
 	
 	float affine_size_increment = (affine_size_near - affine_size_far) / screen_count;
 	float affine_size_current = affine_size_far;
-
+	
 	int screen_position_y = screen_pos_y;
 	int screen_offset_y = sprite_offset_y;
 
-	//log("\n\n dc_draw_ground_multi_layer()");
-
 	for (i = 0; i < screen_count; i++)
 	{
+		//changedrawmethod(NULL(), "tintmode", 1);
 
-		//log("\n\t i: " + i);
+		//if (i % 2 == 0)
+		//{
+		//	changedrawmethod(NULL(), "tintcolor", rgbcolor(255, 0, 0));
+		//}
+		//else
+		//{
+		//	changedrawmethod(NULL(), "tintcolor", rgbcolor(0, 0, 255));
+		//}
 
-		screen = get_screen("ground_" + instance + i, screen_size_x, screen_size_y);
-
-		//log("\n\t screen: " + screen);
-
+		screen = get_screen("multi_" + instance + i, screen_size_x, screen_size_y);
+		
 		clearscreen(screen);
 		drawspriteq(screen, sprite_que_new, sprite_que_z_min, sprite_que_z_max, sprite_offset_x, screen_offset_y);
-
-		// Set global drawMethods.		
-		
-		//log("\n\t affine_size_current (beginsize): " + affine_size_current);
+				
+		// Use previous (or starting) size for beginsize, and 
+		// incremented size for endside.
 
 		changedrawmethod(NULL(), "beginsize", affine_size_current);
 		
 		affine_size_current += affine_size_increment;
 
-		//log("\n\t affine_size_current (endsize): " + affine_size_current);
 		changedrawmethod(NULL(), "endsize", affine_size_current);
 
-	
-		//log("\n\t screen_position_y: " + screen_position_y);
+		// Draw the screen.
 		drawscreen(screen, screen_pos_x, screen_position_y, screen_pos_z);
 
+		// Increment sizes and position for next cycle.
 		screen_position_y += screen_size_y;
-		
-		screen_offset_y+= screen_size_y;
 	}
 
 	// Restore the previous drawmethods.
@@ -252,19 +253,97 @@ void dc_math_bezier_curve_test(float point_a, float point_b, float point_c)
 	}
 }
 
-void dc_scroll_control(void ent)
+void dc_scroll_control(void ent, float speed, int z_min, int z_max)
 {
+	if (getentityproperty(ent, "type") != openborconstant("TYPE_OBSTACLE"))
+	{
+		return;
+	}
+
 	float autoscroll_y = get_level_property(NULL(), openborconstant("LEVEL_PROP_AUTO_SCROLL_Y"));
+	
+	float pos_z = get_entity_property(ent, "position_z");
+	float pos_x = get_entity_property(ent, "position_x");
+
+	float percentage = (pos_z - z_min) / (z_max - z_min);
+
+	speed = speed * percentage;
+
+	if (speed < 0)
+	{
+		speed = 0.001;
+	}
+
+	pos_z += 1.0 * speed;
+
+
+	int level_center_x = get_level_property(NULL(), openborconstant("LEVEL_PROP_SIZE_X")) * 0.5;
+
+	if (pos_x > level_center_x)
+	{
+		pos_x = pos_x += (3.0 * speed);
+	}
+	else if (pos_x < level_center_x)
+	{
+		pos_x = pos_x -= (3.0 * speed);
+	}
+
+	set_entity_property(ent, "position_x", pos_x);
+	set_entity_property(ent, "position_z", pos_z);
 }
 
+// Caskey, Damon V.
+// 2020-10-15
+//
+// Spawn wall obstacles.
+void dc_repeat_spawn(int instance, char model_name, float pos_x, float pos_y, float pos_z, float distance_z)
+{
+	float last_spawn_pos_z;
+
+	void spawn_new = NULL();
+	void spawn_last = getlocalvar("dc_repeat_spawner" + instance);
+
+	// If we have spawned an entity, get distance between
+	// it and the provided Z position. The see if the
+	// distance between them is enough.
+
+	//log("\n\n spawn_last: " + spawn_last);
+
+	if (spawn_last)
+	{
+		last_spawn_pos_z = get_entity_property(spawn_last, "position_z");
+	}
+
+	if (!spawn_last || dc_math_difference_float(pos_z, last_spawn_pos_z) >= distance_z)
+	{
+		clearspawnentry();
+		
+		pos_x -= openborvariant("xpos");
+		
+		setspawnentry("coords", pos_x, pos_z, pos_y);
+		setspawnentry("name", model_name);
+		spawn_new = spawn();
+	
+		setlocalvar("dc_repeat_spawner" + instance, spawn_new);
+	}	
+}
+
+// Caskey, Damon V.
+// 2020-10-14
+//
+// Accept an entity, a Z position of minimal scale, and
+// Z position of maximum scale. Sets drawmethod scale
+// based on the entitiy's current Z position.
 void dc_kanga_auto_scale(void ent, int z_min, int z_max)
 {
 	float pos_z = get_entity_property(ent, "position_z");
 	float percentage = (pos_z - z_min) / (z_max - z_min);
 	void draw = get_entity_property(ent, "drawmethod");
 
+	// Drawmethod accepts size values from 0 to 256.
 	int size = round(percentage * 256);
 
+	// Cap minimum size to 1.
 	if (size < 1)
 	{
 		size = 1;
@@ -303,6 +382,8 @@ void dc_entity_iterator()
 		// Get target entity for this loop increment.
 		ent = getentity(i);
 	
+		dc_scroll_control(ent, 0.22, 60, 220);
+
 		dc_kanga_auto_scale(ent, 55, 190);
 	}
 }
@@ -349,7 +430,7 @@ void ondestroy()
 
 void main() 
 {
-	dc_debug_layers();
+	// dc_debug_layers();
 
 	// Perspective ground draw.
 	setlocalvar(DC_INTRO_GROUND_INSTANCE, 0);
@@ -363,7 +444,7 @@ void main()
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Y_START, 60);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Z_START, -127);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_X, openborvariant("hresolution"));
-	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, 195);
+	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, 190);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_COUNT, 1);
 
 	setlocalvar(DC_DRAW_GROUND_DM_WATERMODE, 3);
@@ -375,10 +456,11 @@ void main()
 	setlocalvar(DC_DRAW_GROUND_LAYER_INDEX_START, 3);
 
 	dc_perspective_set_size_far(0.08);
-	dc_perspective_set_size_near(4.0);
+	dc_perspective_set_size_near(5.0);
 
 	dc_draw_ground_multi_layer();
 
+	
 
 	// Perspective cloud screen draw.
 	setlocalvar(DC_INTRO_GROUND_INSTANCE, 1);
@@ -410,6 +492,14 @@ void main()
 
 
 	dc_player_hud();
+
+	// Spawn rows of trees.
+	//dc_repeat_spawn(0, "tree", 100, 0, 65, 0.5);
+	dc_repeat_spawn(1, "tree", 200, 0, 65, 0.5);
+	dc_repeat_spawn(2, "tree", 250, 0, 65, 0.5);
+	dc_repeat_spawn(3, "tree", 350, 0, 65, 0.5);
+	dc_repeat_spawn(4, "tree", 400, 0, 65, 0.5);
+	//dc_repeat_spawn(5, "tree", 500, 0, 65, 0.5);
 
 	dc_entity_iterator();
 

@@ -1,0 +1,9 @@
+name	 tree
+health	 1
+type	 obstacle
+
+anim idle
+
+	offset 54 108
+
+	frame data/levels/intro/tree_0.png 
