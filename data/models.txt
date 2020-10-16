@@ -18,4 +18,5 @@ know 	intro_controller		data/levels/intro/intro_controller.txt
 load	Lucia_B.			data/chars/lucia/lucia.txt
 
 know	dummy				data/chars/misc/dummy/dummy.txt
+load	tree				data/levels/intro/tree.txt
 
