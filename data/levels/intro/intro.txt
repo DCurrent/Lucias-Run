@@ -1,5 +1,6 @@
 music		data/music/raiden_v_st1.ogg 379726
 direction	both 
+cameratype  0
 
 # Default layers.
 # background	filepath								xratio	zratio	xoffset	zoffset	xspace	zspace	xrepeat	zrepeat	trans	alpha	w-mode	amp	wl	ws	move	quake	neon
@@ -10,7 +11,7 @@ panel		data/levels/intro/path_0.png 	none 			none
 order		a
 
 #bgspeed 	1 1
-vbgspeed 	0.3 1
+vbgspeed 	-0.3  
 
 # Additional layers. I like to use fglayer vs. bglayer because
 # you get fine control over the layer positon.
@@ -18,10 +19,10 @@ vbgspeed 	0.3 1
 # fglayer	filepath									Zpos 	xratio	zratio	xoffset	zoffset	xspace	zspace	xrepeat	zrepeat	trans	alpha	w-mode		amp		wl		ws		move	quake	neon
 
 ###########
-fglayer		data/levels/intro/sky_0.png					-400	0.9		0		0		0		0		0		-1		-1		0		0		0			0		0		0		-0.5	0       0
-fglayer		data/levels/intro/hills_0.png				-399	0.94	0		0		40		0		0		-1		1		1		0		0			0		0		0		0		0       0
-fglayer		data/levels/intro/hills_1.png				-398	0.92	0		0		47		0		0		-1		1		1		0		0			0		0		0		0		0       0
-fglayer		data/levels/intro/grass_0.png				-401	0.6		0		0		0		0		0		-1		-1		0		0		0			0		0		0		1		1       0
+fglayer		data/levels/intro/sky_0.png					-401	0.9		0		0		0		0		0		-1		-1		0		0		0			0		0		0		-0.5	0       0
+fglayer		data/levels/intro/hills_0.png				-399	0.99	1		0		60		0		0		-1		1		1		0		0			0		0		0		0		0       0
+fglayer		data/levels/intro/hills_1.png				-398	0.97	1		0		67		0		0		-1		1		1		0		0			0		0		0		0		0       0
+fglayer		data/levels/intro/grass_0.png				-400	0.6		0.5		0		0		0		0		-1		-1		0		0		0			0		0		0		1		1       0
 
 ##########
 

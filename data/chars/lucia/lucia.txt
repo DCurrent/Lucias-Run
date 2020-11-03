@@ -44,7 +44,7 @@ mpset 100 3 50 1 2 2
 #*****Sub Entites*****
 #*****Alternates*******
 
-#palette	       data/chars/lucia/default_0_cs.act
+palette	       data/chars/lucia/pal_default_ip.act
 #alternatepal   data/chars/terry/default_1_cs.act
 
 #*****Commands*****************************************************************************
@@ -68,8 +68,36 @@ anim idle # Ready stance.
 	bbox.size.y 105
 
 	frame	data/chars/lucia/idle_0.png
+	frame	data/chars/lucia/idle_1.png
+	frame	data/chars/lucia/idle_2.png
+	frame	data/chars/lucia/idle_3.png
+	frame	data/chars/lucia/idle_4.png
+	frame	data/chars/lucia/idle_5.png
+	frame	data/chars/lucia/idle_6.png
+	frame	data/chars/lucia/idle_7.png
 
 anim walk # Normal walk
+
+	loop 	1
+	delay	16
+	offset	75 100
+	
+	bbox.position.x 56
+	bbox.position.y 60
+	bbox.size.x 37
+	bbox.size.y 105
+
+	frame	data/chars/lucia/idle_0.png
+	frame	data/chars/lucia/idle_1.png
+	frame	data/chars/lucia/idle_2.png
+	frame	data/chars/lucia/idle_3.png
+	frame	data/chars/lucia/idle_4.png
+	frame	data/chars/lucia/idle_5.png
+	frame	data/chars/lucia/idle_6.png
+	frame	data/chars/lucia/idle_7.png
+
+
+anim jump # Normal walk
 
 	loop 	1
 	delay	12

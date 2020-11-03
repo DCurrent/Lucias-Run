@@ -29,6 +29,10 @@
 
 #define DC_DRAW_GROUND_LAYER_INDEX_START "dcdraw_lay_i"
 
+#define DC_DRAW_GROUND_LAYER_FLOOR 3
+#define DC_DRAW_GROUND_LAYER_HORIZON_POS_Y 80	// Start of "ground" draw.
+#define DC_DRAW_GROUND_LAYER_FLOOR_SIZE_Y 170	// Vertical size of ground draw.
+
 #endif // DC_INSET
 
 // Caskey, Damon V.
@@ -102,6 +106,7 @@ void dc_draw_ground_multi_layer()
 	int drawmethod_tintmode = getdrawmethod(NULL(), "tintmode");
 	int drawmethod_beginsize = getdrawmethod(NULL(), "beginsize");
 	int drawmethod_endsize = getdrawmethod(NULL(), "endsize");
+	int drawmethod_shift_x = getdrawmethod(NULL(), "shiftx");
 
 	changedrawmethod(NULL(), "reset", 1);
 	changedrawmethod(NULL(), "enabled", 1);
@@ -110,6 +115,7 @@ void dc_draw_ground_multi_layer()
 	changedrawmethod(NULL(), "watermode", dm_watermode);
 	changedrawmethod(NULL(), "perspective", dm_perspective);
 	changedrawmethod(NULL(), "tintmode", dm_tintmode);
+	//changedrawmethod(NULL(), "shiftx", -256);
 	
 	float affine_size_increment = (affine_size_near - affine_size_far) / screen_count;
 	float affine_size_current = affine_size_far;
@@ -158,8 +164,9 @@ void dc_draw_ground_multi_layer()
 	changedrawmethod(NULL(), "watermode", drawmethod_watermode);
 	changedrawmethod(NULL(), "perspective", drawmethod_perspective);
 	changedrawmethod(NULL(), "tintmode", drawmethod_tintmode);
-	changedrawmethod(NULL(), "beginsize", drawmethod_beginsize);
-	changedrawmethod(NULL(), "endsize", drawmethod_endsize);
+	//changedrawmethod(NULL(), "beginsize", drawmethod_beginsize);
+	//changedrawmethod(NULL(), "endsize", drawmethod_endsize);
+	changedrawmethod(NULL(), "shiftx", drawmethod_shift_x);
 }
 
 void dc_debug_layers()
@@ -265,6 +272,47 @@ void dc_scroll_control(void ent, float speed, int z_min, int z_max)
 	float pos_z = get_entity_property(ent, "position_z");
 	float pos_x = get_entity_property(ent, "position_x");
 
+	if (pos_z > (z_max + 200) || pos_z < (z_min - 200))
+	{
+		killentity(ent);
+		return;
+	}
+
+	int layer_index = DC_DRAW_GROUND_LAYER_FLOOR;
+
+	float autoscroll_y = get_level_property(NULL(), openborconstant("LEVEL_PROP_AUTO_SCROLL_Y"));
+
+	
+	float layer_autoscroll_ratio = getlayerproperty("fglayer", layer_index, "bgspeedratio");
+	float layer_z_scroll_ratio = getlayerproperty("fglayer", layer_index, "zratio");
+	                    
+			
+	//
+	settextobj(1, 10, 30, 0, openborconstant("FRONTPANEL_Z"), "autoscroll_y: " + autoscroll_y);
+	settextobj(2, 10, 40, 0, openborconstant("FRONTPANEL_Z"), "layer_autoscroll_ratio: " + layer_autoscroll_ratio);
+
+	// Based on engine formula of (time_elapsed - traveltime) * autoscroll_y / 30 * 4; and
+	// then mutiplying auto scroll ratio of layer.
+	float base_adjustment = (-autoscroll_y / 22 * 4) * layer_autoscroll_ratio;
+
+	settextobj(2, 10, 40, 0, openborconstant("FRONTPANEL_Z"), "base_adjustment: " + base_adjustment);
+
+	float OldRange = (260.0 - DC_DRAW_GROUND_LAYER_HORIZON_POS_Y);
+	float NewRange = (5.0 - 0.08);
+	float NewValue = (((pos_z - DC_DRAW_GROUND_LAYER_HORIZON_POS_Y) * NewRange) / OldRange) + 0.08;
+
+	settextobj(3, 10, 50, 0, openborconstant("FRONTPANEL_Z"), "NewValue: " + NewValue);
+
+	pos_z += base_adjustment * NewValue;
+
+	settextobj(4, 10, 60, 0, openborconstant("FRONTPANEL_Z"), "pos_x: " + pos_x);
+	settextobj(5, 10, 70, 0, openborconstant("FRONTPANEL_Z"), "pos_z: " + pos_z);
+
+
+	// Get center of level.
+
+	int level_center_x = get_level_property(NULL(), openborconstant("LEVEL_PROP_SIZE_X")) * 0.5;
+
 	float percentage = (pos_z - z_min) / (z_max - z_min);
 
 	speed = speed * percentage;
@@ -274,21 +322,21 @@ void dc_scroll_control(void ent, float speed, int z_min, int z_max)
 		speed = 0.001;
 	}
 
-	pos_z += 1.0 * speed;
-
-
-	int level_center_x = get_level_property(NULL(), openborconstant("LEVEL_PROP_SIZE_X")) * 0.5;
-
 	if (pos_x > level_center_x)
 	{
-		pos_x = pos_x += (3.0 * speed);
+		//pos_x = pos_x += (3.0 * speed);
+		-(openborvariant("xpos") * 0.08);
 	}
 	else if (pos_x < level_center_x)
 	{
-		pos_x = pos_x -= (3.0 * speed);
+		//pos_x = pos_x -= (3.0 * speed);// 
+		- (openborvariant("xpos") * 0.08);
 	}
 
-	set_entity_property(ent, "position_x", pos_x);
+	// need to find some way to nullify default scrolling.
+	pos_x = 60 + openborvariant("xpos");
+
+	//set_entity_property(ent, "position_x", pos_x);
 	set_entity_property(ent, "position_z", pos_z);
 }
 
@@ -296,7 +344,7 @@ void dc_scroll_control(void ent, float speed, int z_min, int z_max)
 // 2020-10-15
 //
 // Spawn wall obstacles.
-void dc_repeat_spawn(int instance, char model_name, float pos_x, float pos_y, float pos_z, float distance_z)
+void dc_repeat_spawn(int instance, char model_name, float pos_x, float pos_y, float pos_z, float distance_z, int layer_scroll_sync)
 {
 	float last_spawn_pos_z;
 
@@ -318,14 +366,24 @@ void dc_repeat_spawn(int instance, char model_name, float pos_x, float pos_y, fl
 	{
 		clearspawnentry();
 		
-		pos_x -= openborvariant("xpos");
+		pos_x -= (openborvariant("xpos") * 0.08);
 		
 		setspawnentry("coords", pos_x, pos_z, pos_y);
 		setspawnentry("name", model_name);
 		spawn_new = spawn();
 	
+		log("\n spawn_new: " + spawn_new);
+		settextobj(0, 10, 20, 0, openborconstant("FRONTPANEL_Z"), "Ents: " + openborvariant("count_entities") + "/" + openborvariant("ent_max"));
+
+		// Set up to scroll with the selected layer instead
+		// of at default speed.
+		if (layer_scroll_sync != -1)
+		{
+			changeentityproperty(spawn_new, "scroll", 0);// getlayerproperty("fglayer", layer_scroll_sync, "xratio"));
+		}
+
 		setlocalvar("dc_repeat_spawner" + instance, spawn_new);
-	}	
+	}
 }
 
 // Caskey, Damon V.
@@ -336,6 +394,10 @@ void dc_repeat_spawn(int instance, char model_name, float pos_x, float pos_y, fl
 // based on the entitiy's current Z position.
 void dc_kanga_auto_scale(void ent, int z_min, int z_max)
 {
+	
+	//disable
+	//return;
+
 	float pos_z = get_entity_property(ent, "position_z");
 	float percentage = (pos_z - z_min) / (z_max - z_min);
 	void draw = get_entity_property(ent, "drawmethod");
@@ -361,6 +423,12 @@ void dc_kanga_auto_scale(void ent, int z_min, int z_max)
 
 	//log("\n\t scale_x: " + get_drawmethod_property(draw, "scale_x"));
 	//log("\n\t scale_y: " + get_drawmethod_property(draw, "scale_y"));
+
+	float OldRange = (260.0 - DC_DRAW_GROUND_LAYER_HORIZON_POS_Y);
+	float NewRange = (5.0 - 0.08);
+	float NewValue = (((pos_z - DC_DRAW_GROUND_LAYER_HORIZON_POS_Y) * NewRange) / OldRange) + 0.08;
+
+	changeentityproperty(ent, "scroll", NewValue);
 }
 
 // Caskey, Damon V.
@@ -382,9 +450,9 @@ void dc_entity_iterator()
 		// Get target entity for this loop increment.
 		ent = getentity(i);
 	
-		dc_scroll_control(ent, 0.22, 60, 220);
+		dc_scroll_control(ent, 0.22, DC_DRAW_GROUND_LAYER_HORIZON_POS_Y, 220);
 
-		dc_kanga_auto_scale(ent, 55, 190);
+		dc_kanga_auto_scale(ent, DC_DRAW_GROUND_LAYER_HORIZON_POS_Y, DC_DRAW_GROUND_LAYER_FLOOR_SIZE_Y);
 	}
 }
 
@@ -441,19 +509,19 @@ void main()
 	setlocalvar(DC_INTRO_GROUND_SPRITE_OFFSET_Y, 0);
 
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_X_START, 0);
-	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Y_START, 60);
+	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Y_START, DC_DRAW_GROUND_LAYER_HORIZON_POS_Y);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Z_START, -127);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_X, openborvariant("hresolution"));
-	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, 190);
+	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, DC_DRAW_GROUND_LAYER_FLOOR_SIZE_Y);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_COUNT, 1);
 
-	setlocalvar(DC_DRAW_GROUND_DM_WATERMODE, 3);
-	setlocalvar(DC_DRAW_GROUND_DM_PERSPECTIVE, 1);
+	setlocalvar(DC_DRAW_GROUND_DM_WATERMODE, openborconstant("WATER_MODE_SHEAR"));
+	setlocalvar(DC_DRAW_GROUND_DM_PERSPECTIVE, openborconstant("WATER_PERSPECTIVE_TILE"));
 	setlocalvar(DC_DRAW_GROUND_DM_TINTMODE, openborconstant("BLEND_MODE_ALPHA_NEGATIVE"));
 	setlocalvar(DC_DRAW_GROUND_DM_TINTCOLOR, rgbcolor(0, 200, 0));
 	setlocalvar(DC_DRAW_GROUND_DM_ALPHA, 0);
 
-	setlocalvar(DC_DRAW_GROUND_LAYER_INDEX_START, 3);
+	setlocalvar(DC_DRAW_GROUND_LAYER_INDEX_START, DC_DRAW_GROUND_LAYER_FLOOR);
 
 	dc_perspective_set_size_far(0.08);
 	dc_perspective_set_size_near(5.0);
@@ -474,11 +542,11 @@ void main()
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Y_START, 0);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_POS_Z_START, -130);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_X, openborvariant("hresolution"));
-	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, 60);
+	setlocalvar(DC_DRAW_GROUND_SCREEN_SIZE_Y, DC_DRAW_GROUND_LAYER_HORIZON_POS_Y);
 	setlocalvar(DC_DRAW_GROUND_SCREEN_COUNT, 1);
 
-	setlocalvar(DC_DRAW_GROUND_DM_WATERMODE, 3);
-	setlocalvar(DC_DRAW_GROUND_DM_PERSPECTIVE, 1);
+	setlocalvar(DC_DRAW_GROUND_DM_WATERMODE, openborconstant("WATER_MODE_SHEAR"));
+	setlocalvar(DC_DRAW_GROUND_DM_PERSPECTIVE, openborconstant("WATER_PERSPECTIVE_TILE"));
 	setlocalvar(DC_DRAW_GROUND_DM_TINTMODE, openborconstant("BLEND_MODE_NONE"));
 	setlocalvar(DC_DRAW_GROUND_DM_TINTCOLOR, 0);
 	setlocalvar(DC_DRAW_GROUND_DM_ALPHA, 0);
@@ -494,11 +562,13 @@ void main()
 	dc_player_hud();
 
 	// Spawn rows of trees.
+	//dc_repeat_spawn(1, "tree", 200, 0, 65, 100);
+
 	//dc_repeat_spawn(0, "tree", 100, 0, 65, 0.5);
-	dc_repeat_spawn(1, "tree", 200, 0, 65, 0.5);
-	dc_repeat_spawn(2, "tree", 250, 0, 65, 0.5);
-	dc_repeat_spawn(3, "tree", 350, 0, 65, 0.5);
-	dc_repeat_spawn(4, "tree", 400, 0, 65, 0.5);
+	dc_repeat_spawn(1, "tree", 200, 0, 65, 10, DC_DRAW_GROUND_LAYER_FLOOR);
+	dc_repeat_spawn(2, "tree", 250, 0, 65, 10, DC_DRAW_GROUND_LAYER_FLOOR);
+	dc_repeat_spawn(3, "tree", 350, 0, 65, 0.5, DC_DRAW_GROUND_LAYER_FLOOR);
+	dc_repeat_spawn(4, "tree", 400, 0, 65, 10, DC_DRAW_GROUND_LAYER_FLOOR);
 	//dc_repeat_spawn(5, "tree", 500, 0, 65, 0.5);
 
 	dc_entity_iterator();
